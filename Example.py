@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 
 # if installed using pip
-from tt_wizard_core import tt_wizard_core
+#from tt_wizard_core import tt_wizard_core
 
 # if not installed using pip and using source code
-# from src.tt_wizard_core import tt_wizard_core
+from src.tt_wizard_core import tt_wizard_core
 
 print("Welcome to an example of TT_WIZARD_CORE!")
 
@@ -18,7 +18,7 @@ if len(penPath) < 1:
     penPath = ""
     ttwiz = tt_wizard_core()
 
-# Provide a string to search in the list of available media . 
+# Provide a string to search in the list of available media. 
 print("Please enter keyword to search avaiable media for: ")
 keyword = str(input())
 
@@ -35,5 +35,9 @@ print("Which one do you like to download?")
 chosenNum = int(input())
 ttwiz.downloadMedium(searchResult[chosenNum]) #searchResult[chosenNum] is "<<fileName>>.gme"
 
-# Pass the path and file name to retrieve information on whether an update is suggested or not.
-print("Update? " + str(ttwiz.checkForUpdate(penPath, searchResult[chosenNum])))
+# Pass the file name to retrieve information on whether an update is suggested or not.
+#print("Update? " + str(ttwiz.checkForUpdate(searchResult[chosenNum], penPath))) # when >>penPath<< is different from the one configured in the constructor
+print("Update? " + str(ttwiz.checkForUpdate(searchResult[chosenNum])))
+
+# Perform automatic update on already downloaded media files.
+print("Files updated: " + str(ttwiz.performAutoUpdate()))
