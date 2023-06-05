@@ -3,7 +3,7 @@
 class tt_wizard_core:
     import requests
 
-    LIST_PATH = "https://cdn.ravensburger.de/db/tiptoi.csv"
+    __LIST_PATH = "https://cdn.ravensburger.de/db/tiptoi.csv"
 
     __HEADER__={
             "Accept-Encoding": "gzip,deflate,sdch",
@@ -18,11 +18,19 @@ class tt_wizard_core:
     __downloadPath = ""
 
     def __init__(self, downloadPath = ""):
+        """ __init__(self, downloadPath = "")
+        Contructor.
+
+        (optional) param: String. Specifies path to storage location of gme files.
+        """
         self.__downloadPath = downloadPath
         self.__mediaDict = {}
-        self.__getAvailableMedia(self.LIST_PATH)
+        self.__getAvailableMedia(self.__LIST_PATH)
 
     def __getAvailableMedia(self, path):
+        """ 
+        Downloads csv of available gme-files from __LIST_PATH and decodes them into a dictionary, where title name is used as key.
+        """
         response = self.requests.get(path, headers=self.__HEADER__)
         lines = response.content.splitlines()
         response.close()
@@ -38,6 +46,13 @@ class tt_wizard_core:
                 self.__mediaDict[qualifiedName] = (qualifiedName, url, id, version)
         
     def searchEntry(self, searchString):
+        """ 
+        Search available media files for specified keyword.
+
+        param: >>searchString<< -- String. Keyword to be searched in available titles.
+        return: a.) [] -- Empty list if string is NOT found in any title.
+                b.) [] -- List of all titles that include >>searchString<<
+        """
         result = []
         for item in self.__mediaDict.keys():
             qualifiedName, url, id, version = self.__mediaDict[item] 
@@ -45,17 +60,39 @@ class tt_wizard_core:
                 result.append(item)
         return result
         
-    def downloadMedium(self, fileName):
-        #qualifiedName, url, id, version = medium
-        #filename = url.split('/')[-1]
-        #filename = str(qualifiedName)
+    def downloadMedium(self, fileName, filePath=None):
+        """ 
+        Downloads media file (named >>fileName<<) into specified folder location.
+
+        param1: >>fileName<< -- String. File name of title that shall be downloaded to specified path.
+        param2: >>filePath<< -- (Optional) String. Path to download location.
+        return: No return value.
+        """
+        if filePath is None:
+            path = self.__downloadPath
+        else:
+            path = filePath
+
         (qualifiedName, url, id, versionRemote) = self.__mediaDict[fileName]
         print(f"Downloading: {fileName}")
         response = self.requests.get(url, headers=self.__HEADER__)
-        open((self.__downloadPath + fileName), 'wb').write(response.content)
+        open((path + fileName), 'wb+').write(response.content)
 
-    def checkForUpdate(self, filePath, fileName):
-        with open((filePath + fileName), mode='rb') as file:
+    def checkForUpdate(self, fileName, filePath=None):
+        """
+        Checks whether an update for title named >>fileName<<, which is stored at location >>filePath<<, is required or not.
+
+        param1: >>fileName<< -- String. Name of file to check its update status.
+        param2: >>filePath<< -- (Optional) String. Path to storage location of gme-files.
+        return: TRUE -- Update is required.
+                FALSE -- Update is NOT required.
+        """ 
+        if filePath is None:
+            path = self.__downloadPath
+        else:
+            path = filePath
+            
+        with open((path + fileName), mode='rb') as file:
             fileContent = file.read()
         #version = fileContent[82:90]
         versionLocal = (fileContent[89] - 48) + \
@@ -75,3 +112,26 @@ class tt_wizard_core:
             return True
         else:
             return False
+
+    def performAutoUpdate(self, filePath=None):
+        """ 
+        Iterates through all downloaded gme-files and updates all that are outdated
+
+        param: >>filePath<< -- (Optional) String. Path to storage location of gme-files.
+        return: a.) [] -- Empty list if no titles was updated.
+                b.) [] -- List of all titles that received an update.
+        """
+        from os import listdir
+        if filePath is None:
+            path = self.__downloadPath
+        else:
+            path = filePath
+
+        gmeFiles = [gme for gme in listdir(path) if "gme" in gme]
+        updatedFiles = []
+
+        for title in gmeFiles:
+            if self.checkForUpdate(title, path):
+                self.downloadMedium(title, path)
+                updatedFiles.append(title)
+        return updatedFiles
