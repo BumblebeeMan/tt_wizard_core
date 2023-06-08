@@ -95,20 +95,30 @@ class tt_wizard_core:
         with open((path + fileName), mode='rb') as file:
             fileContent = file.read()
         #version = fileContent[82:90]
-        versionLocal = (fileContent[89] - 48) + \
-                      ((fileContent[88] - 48) * 10) + \
-                      ((fileContent[87] - 48) * 100) + \
-                      ((fileContent[86] - 48) * 1000) + \
-                      ((fileContent[85] - 48) * 10000) + \
-                      ((fileContent[84] - 48) * 100000) + \
-                      ((fileContent[83] - 48) * 1000000) + \
-                      ((fileContent[82] - 48) * 10000000)
+        # search end of timestamp
+        firstDot = fileContent.find(46) # 46 = ASCII "."
+        endOfVersion = fileContent[firstDot:].find(0) + firstDot - 1
+        if (fileContent[endOfVersion] >= 58) or (fileContent[endOfVersion] < 48):
+            for index in range(endOfVersion - 1, 0, -1):
+                if fileContent[index] <= 57 and fileContent[index] >= 48:
+                    endOfVersion = index
+                    break
+        print("Last index: " + str(endOfVersion))
+        versionLocal = (fileContent[endOfVersion] - 48) + \
+                      ((fileContent[endOfVersion -1] - 48) * 10) + \
+                      ((fileContent[endOfVersion - 2] - 48) * 100) + \
+                      ((fileContent[endOfVersion - 3] - 48) * 1000) + \
+                      ((fileContent[endOfVersion - 4] - 48) * 10000) + \
+                      ((fileContent[endOfVersion - 5] - 48) * 100000) + \
+                      ((fileContent[endOfVersion - 6] - 48) * 1000000) + \
+                      ((fileContent[endOfVersion - 7] - 48) * 10000000)
         (qualifiedName, url, id, versionRemote) = self.__mediaDict[fileName]
         # Theoretically updates should only be required, when versionRemote > versionLocal
         # but we are choosing the currently hosted version to be the golden master.
         # Hence, whenever a version mismatch is detected, an update is suggested. 
         if versionRemote != versionLocal:
-            print(f"Local Version: {versionLocal} vs. Remote Version: {versionRemote}")
+            print(f"Medium: {fileName} = Local Version: {versionLocal} vs. Remote Version: {versionRemote}")
+            print("Type: " + str(type(fileContent)))
             return True
         else:
             return False
@@ -132,6 +142,6 @@ class tt_wizard_core:
 
         for title in gmeFiles:
             if self.checkForUpdate(title, path):
-                self.downloadMedium(title, path)
+                #self.downloadMedium(title, path)
                 updatedFiles.append(title)
         return updatedFiles

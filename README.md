@@ -1,16 +1,17 @@
 ﻿# Welcome to TT_WIZARD_CORE!
 
-This projects provides an operating system independent backend to download and manage *.gme-files / audio files for the TipToi® pen sold by Ravensburger®. By removing the hassle to deal with file versioning and download servers, it especially enables the creation of tools on plattforms that are currently not officially supported by the manufacturer itself (like Linux). **TT_WIZARD_CORE** only uses the official servers (i.e. hosted by the manufacturer) to download any media files! 
+This projects provides an operating system independent backend to download and manage *.gme-files / audio files for the TipToi pen sold by Ravensburger. By removing the hassle to deal with file versioning and download servers, it especially enables the creation of tools for operating systems that are currently not officially supported by the manufacturer itself (like Linux). **TT_WIZARD_CORE** only uses the official servers (i.e. hosted by the manufacturer) to download any media files! 
 
 ## Following operations are currently supported:
-- Searching the names of all currently published TipToi® media for a keyword (e.g. "puzzle" to get all puzzles listed).
+- Searching the names of all currently published TipToi media for a keyword (e.g. "puzzle" to get all puzzles listed).
 - Picking and downloading selected media from the search results above.
 - Checking whether an already downloaded media file needs an update or not. (Attention: Files without recent updates may be flagged to require an update, even though no newer versions are available. This is a known issue.) 
+- Auto update of media files that are already loaded to the TipToi pen (more testing ongoing)
 
 ## Planned features
-- Auto update of media files that are already loaded to the TipToi® pen (ready to be tested)
+n/a
 
-## Installation
+## Installation of released version
 
 Use pip to install:
 
@@ -68,4 +69,4 @@ print("Files updated: " + str(ttwiz.performAutoUpdate()))
 
 # Disclaimer and Trademark Notice
 
-NOTE: This package is not verified by, affiliated with, or supported by Ravensburger® AG. TipToi® and Ravensburger® are registered trademarks or trademarks of Ravensburger® AG, in the Germany and/or other countries. These and all other trademarks referenced in this Software or Documentation are the property of their respective owners. The trademarkes are only mentioned for reference.
+NOTE: This package is not verified by, affiliated with, or supported by Ravensburger® AG. TipToi® and Ravensburger® are registered trademarks or trademarks of Ravensburger® AG, in the Germany and/or other countries. These and all other trademarks referenced in this Software or Documentation are the property of their respective owners. The trademarkes are mentioned for reference only.
