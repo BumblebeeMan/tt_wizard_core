@@ -44,7 +44,21 @@ class tt_wizard_core:
                 version = int(entries[1])
                 qualifiedName = (name + ".gme")
                 self.__mediaDict[qualifiedName] = (qualifiedName, url, id, version)
-        
+    
+    def __isDateString(self, dataBytes, position):
+        for index in range(position, position - 8, -1):
+            if (dataBytes[index] >= 58) or (dataBytes[index] < 48):
+                return False
+        return True
+
+    def getAllAvailableTitles(self):
+        result = []
+        for item in self.__mediaDict.keys():
+            qualifiedName, url, id, version = self.__mediaDict[item] 
+            result.append(qualifiedName)
+        return result
+
+    
     def searchEntry(self, searchString):
         """ 
         Search available media files for specified keyword.
@@ -60,11 +74,11 @@ class tt_wizard_core:
                 result.append(item)
         return result
         
-    def downloadMedium(self, fileName, filePath=None):
+    def downloadMedia(self, fileNameList, filePath=None):
         """ 
-        Downloads media file (named >>fileName<<) into specified folder location.
+        Downloads media files into specified folder location.
 
-        param1: >>fileName<< -- String. File name of title that shall be downloaded to specified path.
+        param1: >>fileNameList<< -- List of Strings. File name of title that shall be downloaded to specified path.
         param2: >>filePath<< -- (Optional) String. Path to download location.
         return: No return value.
         """
@@ -72,11 +86,11 @@ class tt_wizard_core:
             path = self.__downloadPath
         else:
             path = filePath
-
-        (qualifiedName, url, id, versionRemote) = self.__mediaDict[fileName]
-        print(f"Downloading: {fileName}")
-        response = self.requests.get(url, headers=self.__HEADER__)
-        open((path + fileName), 'wb+').write(response.content)
+        for title in fileNameList:
+            (qualifiedName, url, id, versionRemote) = self.__mediaDict[title]
+            print(f"Downloading: {qualifiedName}")
+            response = self.requests.get(url, headers=self.__HEADER__)
+            open((path + title), 'wb+').write(response.content)
 
     def checkForUpdate(self, fileName, filePath=None):
         """
@@ -94,16 +108,17 @@ class tt_wizard_core:
             
         with open((path + fileName), mode='rb') as file:
             fileContent = file.read()
-        #version = fileContent[82:90]
         # search end of timestamp
-        firstDot = fileContent.find(46) # 46 = ASCII "."
+        dataString = "CopyRight"
+        arData = bytes(dataString, 'utf-8')
+        firstDot = fileContent.find(arData)
         endOfVersion = fileContent[firstDot:].find(0) + firstDot - 1
         if (fileContent[endOfVersion] >= 58) or (fileContent[endOfVersion] < 48):
-            for index in range(endOfVersion - 1, 0, -1):
-                if fileContent[index] <= 57 and fileContent[index] >= 48:
+            for index in range(endOfVersion - 1, 8, -1):
+                if self.__isDateString(fileContent, index):
                     endOfVersion = index
                     break
-        print("Last index: " + str(endOfVersion))
+        # extract timestamp
         versionLocal = (fileContent[endOfVersion] - 48) + \
                       ((fileContent[endOfVersion -1] - 48) * 10) + \
                       ((fileContent[endOfVersion - 2] - 48) * 100) + \
