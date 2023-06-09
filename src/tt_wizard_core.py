@@ -148,11 +148,14 @@ class tt_wizard_core:
         else:
             return False
 
-    def performAutoUpdate(self, filePath=None):
+    def performAutoUpdate(self, filePath=None, dryRun=False):
         """ 
         Iterates through all downloaded gme-files and updates all that are outdated
 
-        param: >>filePath<< -- (Optional) String. Path to storage location of gme-files.
+        param1: >>filePath<< -- (Optional) String. Path to storage location of gme-files.
+        param2: >>dryRun<< -- (Optional) Bool. 
+                If >>true<<: Evaluate which files require an update only (without downloading the updates). 
+                If >>False<<: Perform evaluation and OVERWRITE old files with their update (default).
         return: a.) [] -- Empty list if no titles was updated.
                 b.) [] -- List of all titles that received an update.
         """
@@ -167,6 +170,7 @@ class tt_wizard_core:
 
         for title in gmeFiles:
             if self.checkForUpdate(title, path):
-                #self.downloadMedium(title, path)
+                if dryRun is False:
+                    self.downloadMedium(title, path)
                 updatedFiles.append(title)
         return updatedFiles
