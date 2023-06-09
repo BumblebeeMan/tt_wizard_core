@@ -46,12 +46,22 @@ class tt_wizard_core:
                 self.__mediaDict[qualifiedName] = (qualifiedName, url, id, version)
     
     def __isDateString(self, dataBytes, position):
+        """
+        Checks whether >>position<< is located at the end of 8 ASCII integers (i.e. the timestamp) or not.
+
+        return: True/False
+        """
         for index in range(position, position - 8, -1):
             if (dataBytes[index] >= 58) or (dataBytes[index] < 48):
                 return False
         return True
 
     def getAllAvailableTitles(self):
+        """ 
+        Return list of all titles that are available for download.
+
+        return: [] -- List of String. List of titles (i.e. fileName + ".gme") that can be downloaded.
+        """
         result = []
         for item in self.__mediaDict.keys():
             qualifiedName, url, id, version = self.__mediaDict[item] 
@@ -78,7 +88,7 @@ class tt_wizard_core:
         """ 
         Downloads media files into specified folder location.
 
-        param1: >>fileNameList<< -- List of Strings. File name of title that shall be downloaded to specified path.
+        param1: [fileNames] -- List of Strings. File name of title that shall be downloaded to specified path.
         param2: >>filePath<< -- (Optional) String. Path to download location.
         return: No return value.
         """
