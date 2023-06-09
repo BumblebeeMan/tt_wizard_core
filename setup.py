@@ -8,7 +8,7 @@ with open("README.md", "r", encoding='utf-8') as file:
 
 setup(
     name = 'tt_wizard_core',
-    version = '0.1.1-beta',
+    version = '0.1.1',
     description = 'Tool to download and manage gme-files. Core of TT_WIZARD.',
     long_description = long_description,
     long_description_content_type='text/markdown',
@@ -26,7 +26,7 @@ setup(
 
     keywords=["TipToi", "TipTio", "tip", "toi", "tio"],
 
-    classifiers=["Development Status :: 3 - Alpha",
+    classifiers=["Development Status :: 4 - Beta",
                  "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
                  "Operating System :: OS Independent",
                  "Programming Language :: Python :: 3",
