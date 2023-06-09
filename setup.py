@@ -18,7 +18,7 @@ setup(
 
     author="BumblebeeMan (Dennis Schweer)", 
     author_email="dennis@bumblebeeman.engineer",     
-    url="https://github.com/BumblebeeMan",
+    url="https://github.com/BumblebeeMan/tt_wizard_core",
 
     install_requires=["requests >= 2.30.0"],
 
