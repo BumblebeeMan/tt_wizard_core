@@ -38,9 +38,9 @@ print("Welcome to an example of TT_WIZARD_CORE!")
 print("What is the path to your TipToi pen?")
 penPath = str(input())
 ttwiz = tt_wizard_core(penPath)
-if len(penPath) < 1:
-    penPath = ""
-    ttwiz = tt_wizard_core()
+#if len(penPath) < 1:
+#    penPath = ""
+#    ttwiz = tt_wizard_core()
 
 # Provide a string to search in the list of available media. 
 print("Please enter keyword to search avaiable media for: ")
@@ -57,14 +57,19 @@ for item in searchResult:
 # Decide on which one to download and download media to folder specified in first step.
 print("Which one do you like to download?")
 chosenNum = int(input())
-ttwiz.downloadMedium(searchResult[chosenNum]) #searchResult[chosenNum] is "<<fileName>>.gme"
+titleAsList = [searchResult[chosenNum]]
+ttwiz.downloadMedia(titleAsList) #searchResult[chosenNum] is "<<fileName>>.gme"
+
+# Do you want to download all available files?
+#allMediaFilesList = ttwiz.getAllAvailableTitles()
+#ttwiz.downloadMedia(allMediaFilesList)
 
 # Pass the file name to retrieve information on whether an update is suggested or not.
 #print("Update? " + str(ttwiz.checkForUpdate(searchResult[chosenNum], penPath))) # when >>penPath<< is different from the one configured in the constructor
 print("Update? " + str(ttwiz.checkForUpdate(searchResult[chosenNum])))
 
 # Perform automatic update on already downloaded media files.
-print("Files updated: " + str(ttwiz.performAutoUpdate()))
+print("Files updated: " + str(ttwiz.performAutoUpdate(dryRun=True)))
 ```
 
 # Disclaimer and Trademark Notice
