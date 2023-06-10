@@ -23,6 +23,8 @@ class tt_wizard_core:
 
         (optional) param: String. Specifies path to storage location of gme files.
         """
+        if downloadPath is "":
+            self.__findMountPoint()
         self.__downloadPath = downloadPath
         self.__mediaDict = {}
         self.__getAvailableMedia(self.__LIST_PATH)
@@ -54,7 +56,25 @@ class tt_wizard_core:
         for index in range(position, position - 8, -1):
             if (dataBytes[index] >= 58) or (dataBytes[index] < 48):
                 return False
-        return True
+        return True 
+
+    def __findMountPoint(self):
+        import psutil
+        for disk in psutil.disk_partitions():
+            mnt = str(disk.mountpoint) + "/"
+            if "tiptoi" in mnt.lower():
+                self.__downloadPath = mnt
+                return True
+        return False
+
+    def setPenPath(self, downloadPath = ""):
+        """ 
+        Overwrites path to pen / download location. For example, to be used when auto detection fails.
+
+        param: >>downloadPath<< -- String. New path value.
+        return: None
+        """
+        self.__downloadPath = downloadPath
 
     def getAllAvailableTitles(self):
         """ 

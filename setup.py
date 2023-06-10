@@ -8,7 +8,7 @@ with open("README.md", "r", encoding='utf-8') as file:
 
 setup(
     name = 'tt_wizard_core',
-    version = '0.1.1',
+    version = '1.0.0-rc',
     description = 'Tool to download and manage gme-files. Core of TT_WIZARD.',
     long_description = long_description,
     long_description_content_type='text/markdown',
@@ -20,7 +20,7 @@ setup(
     author_email="dennis@bumblebeeman.engineer",     
     url="https://github.com/BumblebeeMan/tt_wizard_core",
 
-    install_requires=["requests >= 2.30.0"],
+    install_requires=["requests >= 2.30.0", "psutil >= 5.9.0"],
 
     python_requires=">=3.7",
 
