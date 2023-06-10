@@ -59,6 +59,12 @@ class tt_wizard_core:
         return True 
 
     def __findMountPoint(self):
+        """
+        Tries to find mount point of pen. If mount point is found, __downloadPath is set to mount point path and True returned.
+
+        return: True -- Bool. Mountpoint found.
+                False -- Bool. Mountpoint NOT found.
+        """
         import psutil
         for disk in psutil.disk_partitions():
             mnt = str(disk.mountpoint) + "/"

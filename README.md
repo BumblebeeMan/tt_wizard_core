@@ -7,9 +7,10 @@ This projects provides an operating system independent backend to download and m
 - Picking and downloading selected media from the search results above.
 - Checking whether an already downloaded media file needs an update or not. (Attention: Files without recent updates may be flagged to require an update, even though no newer versions are available. This is a known issue.) 
 - Auto update of media files that are already loaded to the TipToi pen
+- Auto detect of pen mount point (tests ongoing)
 
 ## Planned features
-- Auto detect of pen mount point
+n/a
 
 ## Installation of released version
 
