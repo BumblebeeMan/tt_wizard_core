@@ -15,15 +15,17 @@ class tt_wizard_core:
 
     __mediaDict = {}
 
-    __downloadPath = ""
+    __penPath = ""
 
-    def __init__(self, downloadPath = ""):
-        """ __init__(self, downloadPath = "")
+    def __init__(self, penPath = ""):
+        """ __init__(self, penPath = "")
         Contructor.
 
         (optional) param: String. Specifies path to storage location of gme files.
         """
-        self.__downloadPath = downloadPath
+        if penPath is "":
+            self.__findMountPoint()
+        self.__penPath = penPath
         self.__mediaDict = {}
         self.__getAvailableMedia(self.__LIST_PATH)
 
@@ -54,7 +56,31 @@ class tt_wizard_core:
         for index in range(position, position - 8, -1):
             if (dataBytes[index] >= 58) or (dataBytes[index] < 48):
                 return False
-        return True
+        return True 
+
+    def __findMountPoint(self):
+        """
+        Tries to find mount point of pen. If mount point is found, __penPath is set to mount point path and True returned.
+
+        return: True -- Bool. Mountpoint found.
+                False -- Bool. Mountpoint NOT found.
+        """
+        import psutil
+        for disk in psutil.disk_partitions():
+            mnt = str(disk.mountpoint) + "/"
+            if "tiptoi" in mnt.lower():
+                self.__penPath = mnt
+                return True
+        return False
+
+    def setPenPath(self, penPath = ""):
+        """ 
+        Overwrites path to pen / download location. For example, to be used when auto detection fails.
+
+        param: >>penPath<< -- String. New path value.
+        return: None
+        """
+        self.__penPath = penPath
 
     def getAllAvailableTitles(self):
         """ 
@@ -93,7 +119,7 @@ class tt_wizard_core:
         return: No return value.
         """
         if filePath is None:
-            path = self.__downloadPath
+            path = self.__penPath
         else:
             path = filePath
         for title in fileNameList:
@@ -112,7 +138,7 @@ class tt_wizard_core:
                 FALSE -- Update is NOT required.
         """ 
         if filePath is None:
-            path = self.__downloadPath
+            path = self.__penPath
         else:
             path = filePath
             
@@ -161,7 +187,7 @@ class tt_wizard_core:
         """
         from os import listdir
         if filePath is None:
-            path = self.__downloadPath
+            path = self.__penPath
         else:
             path = filePath
 
