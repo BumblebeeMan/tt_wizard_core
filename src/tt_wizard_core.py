@@ -15,17 +15,15 @@ class tt_wizard_core:
 
     __mediaDict = {}
 
-    __penPath = ""
+    __penMountPoint = ""
 
-    def __init__(self, penPath = ""):
-        """ __init__(self, penPath = "")
+    def __init__(self, penMountPoint = ""):
+        """
         Contructor.
 
         (optional) param: String. Specifies path to storage location of gme files.
         """
-        if penPath is "":
-            self.__findMountPoint()
-        self.__penPath = penPath
+        self.__penMountPoint = penMountPoint
         self.__mediaDict = {}
         self.__getAvailableMedia(self.__LIST_PATH)
 
@@ -58,9 +56,9 @@ class tt_wizard_core:
                 return False
         return True 
 
-    def __findMountPoint(self):
+    def autoDetectPenMountPoint(self):
         """
-        Tries to find mount point of pen. If mount point is found, __penPath is set to mount point path and True returned.
+        Tries to find mount point of pen. If mount point is found, __penMountPoint is set to mount point path and True returned.
 
         return: True -- Bool. Mountpoint found.
                 False -- Bool. Mountpoint NOT found.
@@ -69,18 +67,18 @@ class tt_wizard_core:
         for disk in psutil.disk_partitions():
             mnt = str(disk.mountpoint) + "/"
             if "tiptoi" in mnt.lower():
-                self.__penPath = mnt
+                self.__penMountPoint = mnt
                 return True
         return False
 
-    def setPenPath(self, penPath = ""):
+    def setPenMountPoint(self, penMountPoint = ""):
         """ 
         Overwrites path to pen / download location. For example, to be used when auto detection fails.
 
-        param: >>penPath<< -- String. New path value.
+        param: >>penMountPoint<< -- String. New path value.
         return: None
         """
-        self.__penPath = penPath
+        self.__penMountPoint = penMountPoint
 
     def getAllAvailableTitles(self):
         """ 
@@ -119,7 +117,7 @@ class tt_wizard_core:
         return: No return value.
         """
         if filePath is None:
-            path = self.__penPath
+            path = self.__penMountPoint
         else:
             path = filePath
         for title in fileNameList:
@@ -138,7 +136,7 @@ class tt_wizard_core:
                 FALSE -- Update is NOT required.
         """ 
         if filePath is None:
-            path = self.__penPath
+            path = self.__penMountPoint
         else:
             path = filePath
             
@@ -187,7 +185,7 @@ class tt_wizard_core:
         """
         from os import listdir
         if filePath is None:
-            path = self.__penPath
+            path = self.__penMountPoint
         else:
             path = filePath
 
