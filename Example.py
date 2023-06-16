@@ -8,15 +8,13 @@ from src.tt_wizard_core import tt_wizard_core
 
 print("Welcome to an example of TT_WIZARD_CORE!")
 
-# Create an tt_wizard_core object and provide it with the path to your pen,
-# otherwise the current directory is used.
+# Create an tt_wizard_core object and try to auto dectect pen
 # A list of all available media files is downloaded automatically.
-print("What is the path to your TipToi pen?")
-penPath = str(input())
-ttwiz = tt_wizard_core(penPath)
-#if len(penPath) < 1:
-#    penPath = ""
-#    ttwiz = tt_wizard_core()
+ttwiz = tt_wizard_core()
+if ttwiz.autoDetectPenMountPoint() is False:
+    # If pen is not detected automatically, set mount point manually.
+    print("What is the path to your TipToi pen?")
+    ttwiz.setPenMountPoint(str(input()))
 
 # Provide a string to search in the list of available media. 
 print("Please enter keyword to search avaiable media for: ")
