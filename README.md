@@ -19,6 +19,11 @@ Use pip to install:
 ```python
 pip install tt_wizard_core
 ```
+
+Latest version:
+```python
+pip install tt-wizard-core==1.0.0rc1
+```
  
 ## Usage
 
