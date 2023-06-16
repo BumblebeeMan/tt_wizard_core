@@ -119,7 +119,6 @@ class tt_wizard_core:
             path = filePath
         for title in fileNameList:
             (qualifiedName, url, id, versionRemote) = self.__mediaDict[title]
-            print(f"Downloading: {qualifiedName}")
             response = self.requests.get(url, headers=self.__HEADER__)
             open((path + title), 'wb+').write(response.content)
 
@@ -163,8 +162,6 @@ class tt_wizard_core:
         # but we are choosing the currently hosted version to be the golden master.
         # Hence, whenever a version mismatch is detected, an update is suggested. 
         if versionRemote != versionLocal:
-            print(f"Medium: {fileName} = Local Version: {versionLocal} vs. Remote Version: {versionRemote}")
-            print("Type: " + str(type(fileContent)))
             return True
         else:
             return False
