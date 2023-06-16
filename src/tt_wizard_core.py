@@ -15,6 +15,8 @@ class tt_wizard_core:
 
     __mediaDict = {}
 
+    __mediaNameList = []
+
     __penMountPoint = ""
 
     def __init__(self, penMountPoint = ""):
@@ -25,16 +27,15 @@ class tt_wizard_core:
         """
         self.__penMountPoint = penMountPoint
         self.__mediaDict = {}
-        self.__getAvailableMedia(self.__LIST_PATH)
+        self.__loadAvailableMedia(self.__LIST_PATH)
 
-    def __getAvailableMedia(self, path):
+    def __loadAvailableMedia(self, path):
         """ 
         Downloads csv of available gme-files from __LIST_PATH and decodes them into a dictionary, where title name is used as key.
         """
         response = self.requests.get(path, headers=self.__HEADER__)
         lines = response.content.splitlines()
         response.close()
-        self.__mediaList = []
         for line in lines:
             entries = line.decode('ISO-8859-1').split(',')
             url = entries[2]
@@ -43,6 +44,7 @@ class tt_wizard_core:
                 id = int(entries[0])
                 version = int(entries[1])
                 qualifiedName = (name + ".gme")
+                self.__mediaNameList.append(qualifiedName)
                 self.__mediaDict[qualifiedName] = (qualifiedName, url, id, version)
     
     def __isDateString(self, dataBytes, position):
@@ -86,12 +88,7 @@ class tt_wizard_core:
 
         return: [] -- List of String. List of titles (i.e. fileName + ".gme") that can be downloaded.
         """
-        result = []
-        for item in self.__mediaDict.keys():
-            qualifiedName, url, id, version = self.__mediaDict[item] 
-            result.append(qualifiedName)
-        return result
-
+        return self.__mediaNameList
     
     def searchEntry(self, searchString):
         """ 
