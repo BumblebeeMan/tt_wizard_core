@@ -8,7 +8,7 @@ with open("README.md", "r", encoding='utf-8') as file:
 
 setup(
     name = 'tt_wizard_core',
-    version = '1.0.0-rc',
+    version = '1.0.0-rc1',
     description = 'Tool to download and manage gme-files. Core of TT_WIZARD.',
     long_description = long_description,
     long_description_content_type='text/markdown',
