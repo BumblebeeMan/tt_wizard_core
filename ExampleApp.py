@@ -34,7 +34,7 @@ while True:
     print("Which one do you like to download?")
     chosenNum = int(input())
     if chosenNum >= 0 and chosenNum <= num:
-        titleAsList.add(searchResult[chosenNum]) #searchResult[chosenNum] is "<<fileName>>.gme"
+        titleAsList.append(searchResult[chosenNum]) #searchResult[chosenNum] is "<<fileName>>.gme"
     else:
         print(f"Error! You picked {chosenNum}. Which is not within range 0 till {num}.")
         print("Please try again!")
