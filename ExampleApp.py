@@ -47,14 +47,3 @@ while True:
 print("Start downloading files...")
 ttwiz.downloadMedia(titleAsList) 
 print("Finished downloading files!")
-
-# Do you want to download all available files?
-#allMediaFilesList = ttwiz.getAllAvailableTitles()
-#ttwiz.downloadMedia(allMediaFilesList)
-
-# Pass the file name to retrieve information on whether an update is suggested or not.
-#print("Update? " + str(ttwiz.checkForUpdate(searchResult[chosenNum], penPath))) # when >>penPath<< is different from the one configured in the constructor
-#print("Update? " + str(ttwiz.checkForUpdate(searchResult[chosenNum])))
-
-# Perform automatic update on already downloaded media files.
-#print("Files updated: " + str(ttwiz.performAutoUpdate(dryRun=True)))
