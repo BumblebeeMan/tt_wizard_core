@@ -25,25 +25,32 @@ while True:
     # Search for string and receive a python list of media titles that partially match.
     print("Found following media:")
     searchResult = ttwiz.searchEntry(keyword)
-    num = 0
-    for item in searchResult:
-        print(str(num) + ": " + item)
-        num = num + 1
-
-    # Decide on which one to download and download media to folder specified in first step.
-    print("Which one do you like to download?")
-    chosenNum = int(input())
-    if chosenNum >= 0 and chosenNum <= num:
-        titleAsList.append(searchResult[chosenNum]) #searchResult[chosenNum] is "<<fileName>>.gme"
-    else:
-        print(f"Error! You picked {chosenNum}. Which is not within range 0 till {num}.")
-        print("Please try again!")
     
-    print("Do you want do download more files? [Y]/N ")
+    # Decide on which one to download and download media to folder specified in first step.
+    if len(searchResult) >= 1:
+        num = 0
+        for item in searchResult:
+            print(str(num) + ": " + item)
+            num = num + 1
+        print("Which one do you like to download?")
+        chosenNum = int(input())
+        if chosenNum >= 0 and chosenNum <= num:
+            titleAsList.append(searchResult[chosenNum]) #searchResult[chosenNum] is "<<fileName>>.gme"
+        else:
+            print(f"Error! You picked {chosenNum}. Which is not within range 0 till {num}.")
+            print("Please try again!")
+    else:
+        print(f"No titles containing \"{keyword}\" found.")
+    
+    print("Do you want do pick more files? [Y]/N ")
     option = str(input())
     if option == "N":
         break
 
-print("Start downloading files...")
-ttwiz.downloadMedia(titleAsList) 
-print("Finished downloading files!")
+print("You picked: " + str(titleAsList))
+print("Do you want to download those files? [N]/Y")
+option = str(input())
+if option == "Y":
+    print("Start downloading files...")
+    ttwiz.downloadMedia(titleAsList) 
+    print("Finished downloading files!")
