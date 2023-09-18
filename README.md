@@ -5,11 +5,11 @@ This projects provides an operating system independent backend to download and m
 ## Following operations are currently supported:
 - Searching the names of all currently published TipToi media for a keyword (e.g. "puzzle" to get all puzzles listed).
 - Picking and downloading selected media from the search results above.
-- Checking whether an already downloaded media file needs an update or not.
-- Auto update of media files that are already loaded to the TipToi pen
 - Auto detect of pen mount point (tests ongoing)
 
 ## Planned features
+- Checking whether an already downloaded media file needs an update or not. (Postponed to next version.)
+- Auto update of media files that are already loaded to the TipToi pen. (Postponed to next version.)
 - Update dependencies: Test / expand compatability with older versions
 
 ## Installation of released version
@@ -19,62 +19,9 @@ Use pip to install:
 ```python
 pip install tt_wizard_core
 ```
-
-Latest version:
-```python
-pip install tt-wizard-core==1.0.0rc1
-```
  
 ## Usage
-
-```python
-#!/usr/bin/env python
-
-# if installed using pip
-from tt_wizard_core import tt_wizard_core
-
-# if not installed using pip and using source code
-#from src.tt_wizard_core import tt_wizard_core
-
-print("Welcome to an example of TT_WIZARD_CORE!")
-
-# Create an tt_wizard_core object and try to auto dectect pen
-# A list of all available media files is downloaded automatically.
-ttwiz = tt_wizard_core()
-if ttwiz.autoDetectPenMountPoint() is False:
-    # If pen is not detected automatically, set mount point manually.
-    print("What is the path to your TipToi pen?")
-    ttwiz.setPenMountPoint(str(input()))
-
-# Provide a string to search in the list of available media. 
-print("Please enter keyword to search avaiable media for: ")
-keyword = str(input())
-
-# Search for string and receive a python list of media titles that partially match.
-print("Found following media:")
-searchResult = ttwiz.searchEntry(keyword)
-num = 0
-for item in searchResult:
-    print(str(num) + ": " + item)
-    num = num + 1
-
-# Decide on which one to download and download media to folder specified in first step.
-print("Which one do you like to download?")
-chosenNum = int(input())
-titleAsList = [searchResult[chosenNum]]
-ttwiz.downloadMedia(titleAsList) #searchResult[chosenNum] is "<<fileName>>.gme"
-
-# Do you want to download all available files?
-#allMediaFilesList = ttwiz.getAllAvailableTitles()
-#ttwiz.downloadMedia(allMediaFilesList)
-
-# Pass the file name to retrieve information on whether an update is suggested or not.
-#print("Update? " + str(ttwiz.checkForUpdate(searchResult[chosenNum], penPath))) # when >>penPath<< is different from the one configured in the constructor
-print("Update? " + str(ttwiz.checkForUpdate(searchResult[chosenNum])))
-
-# Perform automatic update on already downloaded media files.
-print("Files updated: " + str(ttwiz.performAutoUpdate(dryRun=True)))
-```
+See example included in "ExampleApp.py".
 
 # Disclaimer and Trademark Notice
 
