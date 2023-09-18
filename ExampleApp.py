@@ -1,5 +1,19 @@
 #!/usr/bin/env python
 
+def searchEntry(mediaList: list, searchString: str):
+    """ 
+    Search available media files for specified keyword.
+
+    param: >>searchString<< -- String. Keyword to be searched in available titles.
+    return: a.) [] -- Empty list if string is NOT found in any title.
+            b.) [] -- List of all titles that include >>searchString<<
+    """
+    result = []
+    for item in mediaList:
+        if searchString.upper() in item.upper():
+            result.append(item)
+    return result
+
 # if installed using pip
 #from tt_wizard_core import tt_wizard_core
 
@@ -16,6 +30,9 @@ if ttwiz.autoDetectPenMountPoint() is False:
     print("What is the path to your TipToi pen?")
     ttwiz.setPenMountPoint(str(input()))
 
+# Get list of available titles
+titleList = ttwiz.getAllAvailableTitles()
+
 titleAsList = []
 while True:
     # Provide a string to search in the list of available media. 
@@ -24,7 +41,7 @@ while True:
     
     # Search for string and receive a python list of media titles that partially match.
     print("Found following media:")
-    searchResult = ttwiz.searchEntry(keyword)
+    searchResult = searchEntry(titleList, keyword)
     
     # Decide on which one to download and download media to folder specified in first step.
     if len(searchResult) >= 1:
