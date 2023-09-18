@@ -89,22 +89,7 @@ class tt_wizard_core:
         return: [] -- List of String. List of titles (i.e. fileName + ".gme") that can be downloaded.
         """
         return self.__mediaNameList__
-    
-    def searchEntry(self, searchString):
-        """ 
-        Search available media files for specified keyword.
-
-        param: >>searchString<< -- String. Keyword to be searched in available titles.
-        return: a.) [] -- Empty list if string is NOT found in any title.
-                b.) [] -- List of all titles that include >>searchString<<
-        """
-        result = []
-        for item in self.__mediaDict__.keys():
-            qualifiedName, url, id, version = self.__mediaDict__[item] 
-            if searchString.upper() in qualifiedName.upper():
-                result.append(item)
-        return result
-        
+            
     def downloadMedia(self, fileNameList, filePath=None):
         """ 
         Downloads media files into specified folder location.
@@ -121,74 +106,3 @@ class tt_wizard_core:
             (qualifiedName, url, id, versionRemote) = self.__mediaDict__[title]
             response = self.requests.get(url, headers=self.__HEADER__)
             open((path + title), 'wb+').write(response.content)
-
-    def checkForUpdate(self, fileName, filePath=None):
-        """
-        Checks whether an update for title named >>fileName<<, which is stored at location >>filePath<<, is required or not.
-
-        param1: >>fileName<< -- String. Name of file to check its update status.
-        param2: >>filePath<< -- (Optional) String. Path to storage location of gme-files.
-        return: TRUE -- Update is required.
-                FALSE -- Update is NOT required.
-        """ 
-        if filePath is None:
-            path = self.__penMountPoint__
-        else:
-            path = filePath
-            
-        with open((path + fileName), mode='rb') as file:
-            fileContent = file.read()
-        # search end of timestamp
-        dataString = "CopyRight"
-        arData = bytes(dataString, 'utf-8')
-        firstDot = fileContent.find(arData)
-        endOfVersion = fileContent[firstDot:].find(0) + firstDot - 1
-        if (fileContent[endOfVersion] >= 58) or (fileContent[endOfVersion] < 48):
-            for index in range(endOfVersion - 1, 8, -1):
-                if self.__isDateString__(fileContent, index):
-                    endOfVersion = index
-                    break
-        # extract timestamp
-        versionLocal = (fileContent[endOfVersion] - 48) + \
-                      ((fileContent[endOfVersion -1] - 48) * 10) + \
-                      ((fileContent[endOfVersion - 2] - 48) * 100) + \
-                      ((fileContent[endOfVersion - 3] - 48) * 1000) + \
-                      ((fileContent[endOfVersion - 4] - 48) * 10000) + \
-                      ((fileContent[endOfVersion - 5] - 48) * 100000) + \
-                      ((fileContent[endOfVersion - 6] - 48) * 1000000) + \
-                      ((fileContent[endOfVersion - 7] - 48) * 10000000)
-        (qualifiedName, url, id, versionRemote) = self.__mediaDict__[fileName]
-        # Theoretically updates should only be required, when versionRemote > versionLocal
-        # but we are choosing the currently hosted version to be the golden master.
-        # Hence, whenever a version mismatch is detected, an update is suggested. 
-        if versionRemote != versionLocal:
-            return True
-        else:
-            return False
-
-    def performAutoUpdate(self, filePath=None, dryRun=False):
-        """ 
-        Iterates through all downloaded gme-files and updates all that are outdated
-
-        param1: >>filePath<< -- (Optional) String. Path to storage location of gme-files.
-        param2: >>dryRun<< -- (Optional) Bool. 
-                If >>true<<: Evaluate which files require an update only (without downloading the updates). 
-                If >>False<<: Perform evaluation and OVERWRITE old files with their update (default).
-        return: a.) [] -- Empty list if no titles was updated.
-                b.) [] -- List of all titles that received an update.
-        """
-        from os import listdir
-        if filePath is None:
-            path = self.__penMountPoint__
-        else:
-            path = filePath
-
-        gmeFiles = [gme for gme in listdir(path) if "gme" in gme]
-        updatedFiles = []
-
-        for title in gmeFiles:
-            if self.checkForUpdate(title, path):
-                if dryRun is False:
-                    self.downloadMedium(title, path)
-                updatedFiles.append(title)
-        return updatedFiles
