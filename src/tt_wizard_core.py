@@ -80,7 +80,12 @@ class tt_wizard_core:
         param: >>penMountPoint<< -- String. New path value.
         return: No return value.
         """
-        self.__penMountPoint__ = penMountPoint
+        # Check if mount path ends with slash or add slash if not.
+        if penMountPoint[-1] == "/":
+            mount = penMountPoint
+        else:
+            mount = penMountPoint + "/"
+        self.__penMountPoint__ = mount
 
     def getAllAvailableTitles(self) -> list:
         """ 
