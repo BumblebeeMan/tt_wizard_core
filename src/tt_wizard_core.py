@@ -19,7 +19,7 @@ class tt_wizard_core:
 
     __penMountPoint__ = ""
 
-    def __init__(self, penMountPoint = ""):
+    def __init__(self, penMountPoint: str = ""):
         """
         Contructor.
 
@@ -29,7 +29,7 @@ class tt_wizard_core:
         self.__mediaDict__ = {}
         self.__loadAvailableMedia__(self.__LIST_PATH__)
 
-    def __loadAvailableMedia__(self, path):
+    def __loadAvailableMedia__(self, path: str):
         """ 
         Downloads csv of available gme-files from __LIST_PATH__ and decodes them into a dictionary, where title name is used as key.
         """
@@ -47,7 +47,7 @@ class tt_wizard_core:
                 self.__mediaNameList__.append(qualifiedName)
                 self.__mediaDict__[qualifiedName] = (qualifiedName, url, id, version)
     
-    def __isDateString__(self, dataBytes, position):
+    def __isDateString__(self, dataBytes: bytes, position: int) -> bool:
         """
         Checks whether >>position<< is located at the end of 8 ASCII integers (i.e. the timestamp) or not.
 
@@ -58,7 +58,7 @@ class tt_wizard_core:
                 return False
         return True 
 
-    def autoDetectPenMountPoint(self):
+    def autoDetectPenMountPoint(self) -> bool:
         """
         Tries to find mount point of pen. If mount point is found, __penMountPoint__ is set to mount point path and True returned.
 
@@ -73,16 +73,16 @@ class tt_wizard_core:
                 return True
         return False
 
-    def setPenMountPoint(self, penMountPoint = ""):
+    def setPenMountPoint(self, penMountPoint: str = ""):
         """ 
         Overwrites path to pen / download location. For example, to be used when auto detection fails.
 
         param: >>penMountPoint<< -- String. New path value.
-        return: None
+        return: No return value.
         """
         self.__penMountPoint__ = penMountPoint
 
-    def getAllAvailableTitles(self):
+    def getAllAvailableTitles(self) -> list:
         """ 
         Return list of all titles that are available for download.
 
@@ -90,7 +90,7 @@ class tt_wizard_core:
         """
         return self.__mediaNameList__
             
-    def downloadMedia(self, fileNameList, filePath=None):
+    def downloadMedia(self, fileNameList: list, filePath: str = None):
         """ 
         Downloads media files into specified folder location.
 
