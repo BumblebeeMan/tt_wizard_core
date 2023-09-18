@@ -3,7 +3,7 @@
 class tt_wizard_core:
     import requests
 
-    __LIST_PATH = "https://cdn.ravensburger.de/db/tiptoi.csv"
+    __LIST_PATH__ = "https://cdn.ravensburger.de/db/tiptoi.csv"
 
     __HEADER__={
             "Accept-Encoding": "gzip,deflate,sdch",
@@ -13,11 +13,11 @@ class tt_wizard_core:
             "Cache-Control": "max-age=0",
             "Connection": "keep-alive"}
 
-    __mediaDict = {}
+    __mediaDict__ = {}
 
-    __mediaNameList = []
+    __mediaNameList__ = []
 
-    __penMountPoint = ""
+    __penMountPoint__ = ""
 
     def __init__(self, penMountPoint = ""):
         """
@@ -25,13 +25,13 @@ class tt_wizard_core:
 
         (optional) param: String. Specifies path to storage location of gme files.
         """
-        self.__penMountPoint = penMountPoint
-        self.__mediaDict = {}
-        self.__loadAvailableMedia(self.__LIST_PATH)
+        self.__penMountPoint__ = penMountPoint
+        self.__mediaDict__ = {}
+        self.__loadAvailableMedia__(self.__LIST_PATH__)
 
-    def __loadAvailableMedia(self, path):
+    def __loadAvailableMedia__(self, path):
         """ 
-        Downloads csv of available gme-files from __LIST_PATH and decodes them into a dictionary, where title name is used as key.
+        Downloads csv of available gme-files from __LIST_PATH__ and decodes them into a dictionary, where title name is used as key.
         """
         response = self.requests.get(path, headers=self.__HEADER__)
         lines = response.content.splitlines()
@@ -44,10 +44,10 @@ class tt_wizard_core:
                 id = int(entries[0])
                 version = int(entries[1])
                 qualifiedName = (name + ".gme")
-                self.__mediaNameList.append(qualifiedName)
-                self.__mediaDict[qualifiedName] = (qualifiedName, url, id, version)
+                self.__mediaNameList__.append(qualifiedName)
+                self.__mediaDict__[qualifiedName] = (qualifiedName, url, id, version)
     
-    def __isDateString(self, dataBytes, position):
+    def __isDateString__(self, dataBytes, position):
         """
         Checks whether >>position<< is located at the end of 8 ASCII integers (i.e. the timestamp) or not.
 
@@ -60,7 +60,7 @@ class tt_wizard_core:
 
     def autoDetectPenMountPoint(self):
         """
-        Tries to find mount point of pen. If mount point is found, __penMountPoint is set to mount point path and True returned.
+        Tries to find mount point of pen. If mount point is found, __penMountPoint__ is set to mount point path and True returned.
 
         return: True -- Bool. Mountpoint found.
                 False -- Bool. Mountpoint NOT found.
@@ -69,7 +69,7 @@ class tt_wizard_core:
         for disk in psutil.disk_partitions():
             mnt = str(disk.mountpoint) + "/"
             if "tiptoi" in mnt.lower():
-                self.__penMountPoint = mnt
+                self.__penMountPoint__ = mnt
                 return True
         return False
 
@@ -80,7 +80,7 @@ class tt_wizard_core:
         param: >>penMountPoint<< -- String. New path value.
         return: None
         """
-        self.__penMountPoint = penMountPoint
+        self.__penMountPoint__ = penMountPoint
 
     def getAllAvailableTitles(self):
         """ 
@@ -88,7 +88,7 @@ class tt_wizard_core:
 
         return: [] -- List of String. List of titles (i.e. fileName + ".gme") that can be downloaded.
         """
-        return self.__mediaNameList
+        return self.__mediaNameList__
     
     def searchEntry(self, searchString):
         """ 
@@ -99,8 +99,8 @@ class tt_wizard_core:
                 b.) [] -- List of all titles that include >>searchString<<
         """
         result = []
-        for item in self.__mediaDict.keys():
-            qualifiedName, url, id, version = self.__mediaDict[item] 
+        for item in self.__mediaDict__.keys():
+            qualifiedName, url, id, version = self.__mediaDict__[item] 
             if searchString.upper() in qualifiedName.upper():
                 result.append(item)
         return result
@@ -114,11 +114,11 @@ class tt_wizard_core:
         return: No return value.
         """
         if filePath is None:
-            path = self.__penMountPoint
+            path = self.__penMountPoint__
         else:
             path = filePath
         for title in fileNameList:
-            (qualifiedName, url, id, versionRemote) = self.__mediaDict[title]
+            (qualifiedName, url, id, versionRemote) = self.__mediaDict__[title]
             response = self.requests.get(url, headers=self.__HEADER__)
             open((path + title), 'wb+').write(response.content)
 
@@ -132,7 +132,7 @@ class tt_wizard_core:
                 FALSE -- Update is NOT required.
         """ 
         if filePath is None:
-            path = self.__penMountPoint
+            path = self.__penMountPoint__
         else:
             path = filePath
             
@@ -145,7 +145,7 @@ class tt_wizard_core:
         endOfVersion = fileContent[firstDot:].find(0) + firstDot - 1
         if (fileContent[endOfVersion] >= 58) or (fileContent[endOfVersion] < 48):
             for index in range(endOfVersion - 1, 8, -1):
-                if self.__isDateString(fileContent, index):
+                if self.__isDateString__(fileContent, index):
                     endOfVersion = index
                     break
         # extract timestamp
@@ -157,7 +157,7 @@ class tt_wizard_core:
                       ((fileContent[endOfVersion - 5] - 48) * 100000) + \
                       ((fileContent[endOfVersion - 6] - 48) * 1000000) + \
                       ((fileContent[endOfVersion - 7] - 48) * 10000000)
-        (qualifiedName, url, id, versionRemote) = self.__mediaDict[fileName]
+        (qualifiedName, url, id, versionRemote) = self.__mediaDict__[fileName]
         # Theoretically updates should only be required, when versionRemote > versionLocal
         # but we are choosing the currently hosted version to be the golden master.
         # Hence, whenever a version mismatch is detected, an update is suggested. 
@@ -179,7 +179,7 @@ class tt_wizard_core:
         """
         from os import listdir
         if filePath is None:
-            path = self.__penMountPoint
+            path = self.__penMountPoint__
         else:
             path = filePath
 
