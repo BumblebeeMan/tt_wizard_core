@@ -5,11 +5,11 @@ This projects provides an operating system independent backend to download and m
 ## Following operations are currently supported:
 - Searching the names of all currently published TipToi media for a keyword (e.g. "puzzle" to get all puzzles listed).
 - Picking and downloading selected media from the search results above.
-- Auto detect of pen mount point (tests ongoing)
+- Auto detect of pen mount point
+- Checking whether an already downloaded media file needs an update or not.
+- Auto update of media files that are already loaded to the TipToi pen.
 
 ## Planned features
-- Checking whether an already downloaded media file needs an update or not. (Postponed to next version.)
-- Auto update of media files that are already loaded to the TipToi pen. (Postponed to next version.)
 - Update dependencies: Test / expand compatability with older versions
 
 ## Installation of released version
