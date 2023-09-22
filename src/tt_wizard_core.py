@@ -99,7 +99,7 @@ class tt_wizard_core:
         Downloads media files into specified folder location.
 
         param1: [fileNames] -- List of Strings. File name of title that shall be downloaded to specified path.
-        param2: >>filePath<< -- (Optional) String. Path to download location.
+        param2: >>filePath<< -- (Optional) String. Overwrites path to download location. If unused, previously set pen mount point is used. 
         return: No return value.
         """
         if filePath is None:
