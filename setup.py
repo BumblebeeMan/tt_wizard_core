@@ -26,7 +26,7 @@ setup(
 
     keywords=["TipToi", "TipTio", "tip", "toi", "tio"],
 
-    classifiers=["Development Status :: 4 - Beta",
+    classifiers=["Development Status :: 5 - Production/Stable",
                  "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
                  "Operating System :: OS Independent",
                  "Programming Language :: Python :: 3",
